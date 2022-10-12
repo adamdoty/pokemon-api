@@ -2,32 +2,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional, List
 
+from utils import Pokemon, convert_csv_to_dict
 
-class Pokemon(BaseModel):
-    name: str
-    japanese_name: str
-    pokedex_number: int
-    percentage_male: Optional[float]
-    type1: str
-    type2: str
-    classification: str
-    height_m: float
-    weight_kg: float
-    capture_rate: float
-    baseeggsteps: int
-    abilities: List
-    experience_growth: str
-    base_happiness: int
-    against_type: List[float]
-    hp: int
-    attack: int
-    defense: int
-    sp_attack: int
-    sp_defense: int
-    speed: int
-    generation: str
-    is_legendary: bool
-
+DATA = 'pokemon.csv'
+all_pokemon = convert_csv_to_dict(DATA)
 
 app = FastAPI()
 
@@ -35,3 +13,9 @@ app = FastAPI()
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
+
+
+@app.post("/", status_code=201)
+async def create_pokemon(pokemon: Pokemon):
+    all_pokemon[pokemon.pokedex_number] = pokemon
+    return pokemon
