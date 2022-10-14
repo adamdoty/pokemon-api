@@ -1,6 +1,5 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
 import csv
-import re
 
 from pydantic import BaseModel
 
@@ -47,7 +46,7 @@ def convert_csv_to_dict(data=DATA):
             print(row)
             print(row['name'])
 
-            yield Pokemon(
+            yield row['pokedex_number'], Pokemon(
                 name=row['name'],
                 japanese_name=row['japanese_name'],
                 pokedex_number=row['pokedex_number'],
@@ -77,5 +76,6 @@ def convert_csv_to_dict(data=DATA):
             counter += 1
 
 
-data = list(convert_csv_to_dict())
-print(data[:3])
+data = dict(convert_csv_to_dict())
+# data = list(convert_csv_to_dict())
+print(data[1])
